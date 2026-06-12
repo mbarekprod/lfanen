@@ -3,70 +3,177 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎡 عجلة الحظ الفنان</title>
+<title>🎡 عجلة الحظ الفنان PRO</title>
+
 <style>
 body{
-font-family:Arial;
-text-align:center;
-background:#3a1f0d;
-color:white;
-padding:20px;
+  margin:0;
+  font-family:Arial;
+  text-align:center;
+  background: radial-gradient(circle, #3a1f0d, #000);
+  color:white;
+  padding:20px;
 }
+
 h1{
-color:#ffd700;
+  color:#ffd700;
 }
+
+.wheel-container{
+  position:relative;
+  width:320px;
+  height:320px;
+  margin:30px auto;
+}
+
+.wheel{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  border:6px solid gold;
+  overflow:hidden;
+  position:relative;
+  transition:transform 4s cubic-bezier(0.17,0.67,0.83,1);
+}
+
+.pointer{
+  position:absolute;
+  top:-15px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:40px;
+  color:red;
+}
+
+.segment{
+  position:absolute;
+  width:50%;
+  height:50%;
+  transform-origin:100% 100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+  font-weight:bold;
+  color:#000;
+}
+
 button{
-background:#ffd700;
-border:none;
-padding:15px 30px;
-font-size:20px;
-border-radius:10px;
-cursor:pointer;
+  background:#ffd700;
+  border:none;
+  padding:15px 30px;
+  font-size:18px;
+  border-radius:10px;
+  cursor:pointer;
+  margin-top:20px;
 }
+
 #result{
-margin-top:20px;
-font-size:30px;
-color:#00ff88;
+  margin-top:20px;
+  font-size:28px;
+  color:#00ff88;
 }
 </style>
 </head>
+
 <body>
 
-<h1>🎡 عجلة الحظ الفنان 🎡</h1>
+<h1>🎡 عجلة الحظ الفنان PRO 🎡</h1>
+<p>اضغط وجرّب حظك 🔥</p>
 
-<p>اضغط على الزر وجرّب حظك</p>
+<div class="wheel-container">
+  <div class="pointer">▼</div>
+  <div class="wheel" id="wheel"></div>
+</div>
 
-<button onclick="spinWheel()">دور العجلة</button>
+<button onclick="spinWheel()">دور العجلة 🎡</button>
 
 <div id="result"></div>
 
 <script>
-function spinWheel() {
+const segments = [
+  "🔄 المرة الجاية",
+  "💧 دابوزة ماء",
+  "🍟 فريت",
+  "🥤 قازوزة",
+  "🎟️ 10%"
+];
 
-let random = Math.random()*100;
+const wheel = document.getElementById("wheel");
+const result = document.getElementById("result");
 
-let prize="";
+let rotation = 0;
 
-if(random<40){
-prize="🔄 المرة الجاية";
-}
-else if(random<65){
-prize="💧 دابوزة ماء";
-}
-else if(random<85){
-prize="🍟 إضافة فريت";
-}
-else if(random<95){
-prize="🥤 قازوزة";
-}
-else{
-prize="🎟️ تخفيض 10 بالمية";
+// 🎨 build wheel
+function buildWheel(){
+  const angle = 360 / segments.length;
+
+  segments.forEach((text,i)=>{
+    const seg = document.createElement("div");
+
+    seg.className = "segment";
+    seg.style.transform = `rotate(${i * angle}deg) skewY(${90-angle}deg)`;
+    seg.style.background = i % 2 ? "#ffcc00" : "#ff6600";
+
+    seg.innerHTML = `<div style="transform: skewY(-${90-angle}deg) rotate(${angle/2}deg);">
+      ${text}
+    </div>`;
+
+    wheel.appendChild(seg);
+  });
 }
 
-document.getElementById("result").innerHTML=
-"🎉 مبروك! ربحت: <br><br>"+prize+
-"<br><br>📱 أظهر هذه الشاشة للكاشير";
+buildWheel();
+
+// 🎡 spin PRO
+function spinWheel(){
+
+  const index = Math.floor(Math.random()*segments.length);
+  const anglePer = 360 / segments.length;
+
+  rotation += 5*360 + (360 - index * anglePer);
+
+  wheel.style.transform = `rotate(${rotation}deg)`;
+
+  setTimeout(()=>{
+
+    let prize = segments[index];
+
+    result.innerHTML = "🎉 مبروك! ربحت: <br><br>" + prize + "<br><br>📱 ورّيها للكاشير";
+
+    launchConfetti();
+
+  },4000);
 }
+
+// 🎉 confetti
+function launchConfetti(){
+  for(let i=0;i<60;i++){
+    const c = document.createElement("div");
+    c.innerHTML="🎉";
+    c.style.position="fixed";
+    c.style.left=Math.random()*100+"vw";
+    c.style.top="-20px";
+    c.style.fontSize="20px";
+    c.style.animation="fall 3s linear";
+    document.body.appendChild(c);
+
+    setTimeout(()=>c.remove(),3000);
+  }
+}
+
+// CSS animation
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes fall{
+  to{
+    transform:translateY(100vh);
+    opacity:0;
+  }
+}
+`;
+document.head.appendChild(style);
+
 </script>
 
 </body>
