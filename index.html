@@ -3,43 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>El Fanen Wheel PRO</title>
+<title>El Fanen Wheel Casino</title>
 
 <style>
 body{
   margin:0;
   font-family:Arial;
+  background:url('https://images.unsplash.com/photo-1600891964092-4316c288032e') center/cover;
   text-align:center;
-  background: radial-gradient(circle at top, #1a0e07, #000);
   color:white;
+}
+
+/* overlay dark like your design */
+.overlay{
+  background:rgba(0,0,0,0.75);
+  min-height:100vh;
+  padding:20px;
 }
 
 /* title */
 h1{
-  margin-top:20px;
-  color:#ffd700;
-  font-size:34px;
-  text-shadow:0 0 15px #ffcc00;
+  color:#ffcc00;
+  font-size:32px;
+  text-shadow:0 0 10px #ffcc00;
 }
 
-/* container */
+/* wheel container */
 .wheel-container{
   position:relative;
-  width:320px;
-  height:320px;
-  margin:40px auto;
+  width:340px;
+  height:340px;
+  margin:30px auto;
 }
 
 /* pointer */
 .pointer{
   position:absolute;
-  top:-18px;
+  top:-15px;
   left:50%;
   transform:translateX(-50%);
-  font-size:45px;
-  color:#ff2e2e;
-  filter:drop-shadow(0 0 6px black);
+  font-size:40px;
+  color:#ff3b3b;
   z-index:10;
+  filter:drop-shadow(0 0 5px black);
 }
 
 /* wheel */
@@ -47,14 +53,14 @@ h1{
   width:100%;
   height:100%;
   border-radius:50%;
-  border:8px solid #ffd700;
+  border:10px solid gold;
   overflow:hidden;
   position:relative;
   transition:transform 4s cubic-bezier(0.17,0.67,0.83,1);
-  box-shadow:0 0 25px rgba(255,215,0,0.4);
+  box-shadow:0 0 25px gold;
 }
 
-/* segment */
+/* segments */
 .segment{
   position:absolute;
   width:50%;
@@ -63,63 +69,72 @@ h1{
   display:flex;
   align-items:center;
   justify-content:center;
-  overflow:hidden;
-}
-
-/* text */
-.segment span{
-  position:absolute;
-  width:100%;
-  text-align:center;
   font-weight:bold;
-  font-size:13px;
+  font-size:14px;
   color:#111;
-  top:40px;
 }
 
 /* button */
 button{
-  margin-top:20px;
-  background:linear-gradient(45deg,#ffd700,#ffb300);
+  background:linear-gradient(45deg,#ffcc00,#ff8800);
   border:none;
-  padding:14px 35px;
+  padding:15px 35px;
   font-size:18px;
   border-radius:12px;
   cursor:pointer;
+  margin-top:20px;
   font-weight:bold;
   box-shadow:0 5px 15px rgba(0,0,0,0.4);
 }
 
-button:active{
-  transform:scale(0.97);
-}
-
-/* result */
 #result{
   margin-top:20px;
-  font-size:26px;
-  color:#00ff88;
-  text-shadow:0 0 10px #00ff88;
+  font-size:28px;
+  color:#00ff99;
+  text-shadow:0 0 10px #00ff99;
+}
+
+/* lights effect */
+.light{
+  position:absolute;
+  width:10px;
+  height:10px;
+  background:gold;
+  border-radius:50%;
+  box-shadow:0 0 15px gold;
+  animation:blink 1s infinite alternate;
+}
+
+@keyframes blink{
+  from{opacity:0.3;}
+  to{opacity:1;}
 }
 </style>
 </head>
 
 <body>
 
-<h1>🎡 EL FANEN WHEEL PRO 🎡</h1>
+<div class="overlay">
+
+<h1>🎡 EL FANEN CASINO WHEEL 🎡</h1>
 
 <div class="wheel-container">
   <div class="pointer">▼</div>
   <div class="wheel" id="wheel"></div>
 </div>
 
-<button onclick="spinWheel()">SPIN 🎯</button>
+<button onclick="spinWheel()">🎯 DÉFIER L’AJJALE</button>
 
 <div id="result"></div>
 
+<!-- sound -->
+<audio id="spinSound" src="https://www.soundjay.com/button/sounds/button-16.mp3"></audio>
+
+</div>
+
 <script>
 const segments = [
-  "🍕 Pizza gratuite",
+  "🍕 Pizza",
   "💧 Eau",
   "🍟 Frites",
   "🥤 Boisson",
@@ -129,10 +144,11 @@ const segments = [
 
 const wheel = document.getElementById("wheel");
 const result = document.getElementById("result");
+const sound = document.getElementById("spinSound");
 
 let rotation = 0;
 
-/* 🎨 build wheel */
+/* build wheel */
 function buildWheel(){
   const angle = 360 / segments.length;
 
@@ -144,11 +160,12 @@ function buildWheel(){
     seg.style.background = i % 2 ? "#ffcc00" : "#ff9900";
 
     seg.innerHTML = `
-      <span style="
+      <div style="
         transform: skewY(-${90-angle}deg) rotate(${angle/2}deg);
+        text-align:center;
       ">
         ${text}
-      </span>
+      </div>
     `;
 
     wheel.appendChild(seg);
@@ -157,17 +174,18 @@ function buildWheel(){
 
 buildWheel();
 
-/* 🎡 spin PRO FIXED */
+/* spin PRO + sound */
 function spinWheel(){
 
   const index = Math.floor(Math.random()*segments.length);
   const anglePer = 360 / segments.length;
-
   const stopAngle = index * anglePer;
 
   rotation += 5*360 + (360 - stopAngle);
 
   wheel.style.transform = `rotate(${rotation}deg)`;
+
+  sound.play();
 
   setTimeout(()=>{
 
