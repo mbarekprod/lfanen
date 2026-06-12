@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎡 عجلة الحظ الفنان</title>
+<style>
+body{
+font-family:Arial;
+text-align:center;
+background:#3a1f0d;
+color:white;
+padding:20px;
+}
+h1{
+color:#ffd700;
+}
+button{
+background:#ffd700;
+border:none;
+padding:15px 30px;
+font-size:20px;
+border-radius:10px;
+cursor:pointer;
+}
+#result{
+margin-top:20px;
+font-size:30px;
+color:#00ff88;
+}
+</style>
+</head>
+<body>
+
+<h1>🎡 عجلة الحظ الفنان 🎡</h1>
+
+<p>اضغط على الزر وجرّب حظك</p>
+
+<button onclick="spinWheel()">دور العجلة</button>
+
+<div id="result"></div>
+
+<script>
+function spinWheel() {
+
+let random = Math.random()*100;
+
+let prize="";
+
+if(random<40){
+prize="🔄 المرة الجاية";
+}
+else if(random<65){
+prize="💧 دابوزة ماء";
+}
+else if(random<85){
+prize="🍟 إضافة فريت";
+}
+else if(random<95){
+prize="🥤 قازوزة";
+}
+else{
+prize="🎟️ تخفيض 10 بالمية";
+}
+
+document.getElementById("result").innerHTML=
+"🎉 مبروك! ربحت: <br><br>"+prize+
+"<br><br>📱 أظهر هذه الشاشة للكاشير";
+}
+</script>
+
+</body>
+</html>
