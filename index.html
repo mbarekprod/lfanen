@@ -3,48 +3,58 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🎡 عجلة الحظ الفنان PRO</title>
+<title>El Fanen Wheel PRO</title>
 
 <style>
 body{
   margin:0;
   font-family:Arial;
   text-align:center;
-  background: radial-gradient(circle, #3a1f0d, #000);
+  background: radial-gradient(circle at top, #1a0e07, #000);
   color:white;
-  padding:20px;
 }
 
+/* title */
 h1{
+  margin-top:20px;
   color:#ffd700;
+  font-size:34px;
+  text-shadow:0 0 15px #ffcc00;
 }
 
+/* container */
 .wheel-container{
   position:relative;
   width:320px;
   height:320px;
-  margin:30px auto;
+  margin:40px auto;
 }
 
+/* pointer */
+.pointer{
+  position:absolute;
+  top:-18px;
+  left:50%;
+  transform:translateX(-50%);
+  font-size:45px;
+  color:#ff2e2e;
+  filter:drop-shadow(0 0 6px black);
+  z-index:10;
+}
+
+/* wheel */
 .wheel{
   width:100%;
   height:100%;
   border-radius:50%;
-  border:6px solid gold;
+  border:8px solid #ffd700;
   overflow:hidden;
   position:relative;
   transition:transform 4s cubic-bezier(0.17,0.67,0.83,1);
+  box-shadow:0 0 25px rgba(255,215,0,0.4);
 }
 
-.pointer{
-  position:absolute;
-  top:-15px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:40px;
-  color:red;
-}
-
+/* segment */
 .segment{
   position:absolute;
   width:50%;
@@ -53,50 +63,68 @@ h1{
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:14px;
+  overflow:hidden;
+}
+
+/* text */
+.segment span{
+  position:absolute;
+  width:100%;
+  text-align:center;
   font-weight:bold;
-  color:#000;
+  font-size:13px;
+  color:#111;
+  top:40px;
 }
 
+/* button */
 button{
-  background:#ffd700;
-  border:none;
-  padding:15px 30px;
-  font-size:18px;
-  border-radius:10px;
-  cursor:pointer;
   margin-top:20px;
+  background:linear-gradient(45deg,#ffd700,#ffb300);
+  border:none;
+  padding:14px 35px;
+  font-size:18px;
+  border-radius:12px;
+  cursor:pointer;
+  font-weight:bold;
+  box-shadow:0 5px 15px rgba(0,0,0,0.4);
 }
 
+button:active{
+  transform:scale(0.97);
+}
+
+/* result */
 #result{
   margin-top:20px;
-  font-size:28px;
+  font-size:26px;
   color:#00ff88;
+  text-shadow:0 0 10px #00ff88;
 }
 </style>
 </head>
 
 <body>
 
-<h1>🎡 عجلة الحظ الفنان PRO 🎡</h1>
-<p>اضغط وجرّب حظك 🔥</p>
+<h1>🎡 EL FANEN WHEEL PRO 🎡</h1>
 
 <div class="wheel-container">
   <div class="pointer">▼</div>
   <div class="wheel" id="wheel"></div>
 </div>
 
-<button onclick="spinWheel()">دور العجلة 🎡</button>
+<button onclick="spinWheel()">SPIN 🎯</button>
 
 <div id="result"></div>
 
 <script>
 const segments = [
-  "🔄 المرة الجاية",
-  "💧 دابوزة ماء",
-  "🍟 فريت",
-  "🥤 قازوزة",
-  "🎟️ 10%"
+  "🍕 Pizza gratuite",
+  "💧 Eau",
+  "🍟 Frites",
+  "🥤 Boisson",
+  "🎟️ -10%",
+  "🔄 Rejoue"
 ];
 
 const wheel = document.getElementById("wheel");
@@ -104,7 +132,7 @@ const result = document.getElementById("result");
 
 let rotation = 0;
 
-// 🎨 build wheel
+/* 🎨 build wheel */
 function buildWheel(){
   const angle = 360 / segments.length;
 
@@ -113,11 +141,15 @@ function buildWheel(){
 
     seg.className = "segment";
     seg.style.transform = `rotate(${i * angle}deg) skewY(${90-angle}deg)`;
-    seg.style.background = i % 2 ? "#ffcc00" : "#ff6600";
+    seg.style.background = i % 2 ? "#ffcc00" : "#ff9900";
 
-    seg.innerHTML = `<div style="transform: skewY(-${90-angle}deg) rotate(${angle/2}deg);">
-      ${text}
-    </div>`;
+    seg.innerHTML = `
+      <span style="
+        transform: skewY(-${90-angle}deg) rotate(${angle/2}deg);
+      ">
+        ${text}
+      </span>
+    `;
 
     wheel.appendChild(seg);
   });
@@ -125,55 +157,27 @@ function buildWheel(){
 
 buildWheel();
 
-// 🎡 spin PRO
+/* 🎡 spin PRO FIXED */
 function spinWheel(){
 
   const index = Math.floor(Math.random()*segments.length);
   const anglePer = 360 / segments.length;
 
-  rotation += 5*360 + (360 - index * anglePer);
+  const stopAngle = index * anglePer;
+
+  rotation += 5*360 + (360 - stopAngle);
 
   wheel.style.transform = `rotate(${rotation}deg)`;
 
   setTimeout(()=>{
 
-    let prize = segments[index];
-
-    result.innerHTML = "🎉 مبروك! ربحت: <br><br>" + prize + "<br><br>📱 ورّيها للكاشير";
-
-    launchConfetti();
+    result.innerHTML =
+      "🎉 <b>FÉLICITATIONS!</b><br><br>" +
+      segments[index] +
+      "<br><br>📱 Montrez ça au caissier";
 
   },4000);
 }
-
-// 🎉 confetti
-function launchConfetti(){
-  for(let i=0;i<60;i++){
-    const c = document.createElement("div");
-    c.innerHTML="🎉";
-    c.style.position="fixed";
-    c.style.left=Math.random()*100+"vw";
-    c.style.top="-20px";
-    c.style.fontSize="20px";
-    c.style.animation="fall 3s linear";
-    document.body.appendChild(c);
-
-    setTimeout(()=>c.remove(),3000);
-  }
-}
-
-// CSS animation
-const style = document.createElement("style");
-style.innerHTML = `
-@keyframes fall{
-  to{
-    transform:translateY(100vh);
-    opacity:0;
-  }
-}
-`;
-document.head.appendChild(style);
-
 </script>
 
 </body>
